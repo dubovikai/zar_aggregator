@@ -1,0 +1,14 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.banditEnabled": true,
+    "python.linting.banditArgs": [
+        "--skip","B608,B501,B311,B701,B104,B105",
+        "--exclude","./tests/"
+    ],
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=200",
+        "--ignore=W291,E127,F401,W391,E731,E712,E711,F811,E402",
+    ]
+}
