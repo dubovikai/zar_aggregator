@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship, backref
 
 from main import engine
 
-metadata_obj = sa.MetaData(schema="public")
+metadata_obj = sa.MetaData()
 Base = declarative_base(metadata=metadata_obj)
 
 

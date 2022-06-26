@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     api_token = 'secret'
 
-    db_string = "postgresql://api:api@localhost/api"
+    db_string = "mysql+mysqlconnector://API:123@localhost/api"
 
     class Config:
         env_file = '.env'
