@@ -11,16 +11,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "env": {"PYTHONPATH": "${workspaceFolder}/src"}
+            "env": {"PYTHONPATH": "${workspaceFolder}/app"}
         },
         {
             "name": "App",
             "type": "python",
             "request": "launch",
             "module": "uvicorn",
-            "cwd": "${workspaceFolder}/src",
+            "cwd": "${workspaceFolder}/app",
             "args": [
-                "main:app",
+                "app.main:app",
                 "--reload"
             ],
             "jinja": true
