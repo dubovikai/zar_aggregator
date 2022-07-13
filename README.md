@@ -1,1 +1,1 @@
-# zar_aggregator test string
+# zar_aggregator
