@@ -28,6 +28,7 @@ services:
         - "8088:80"
 
   
+<<<<<<< HEAD
   backend:
       image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
       ports:
@@ -52,3 +53,23 @@ services:
       depends_on:
           - db # старт после старта контейнера db
           - phpmyadmin
+=======
+#   backend:
+#       image: 'backend'
+#       depends_on:
+#           - db
+#       ports:
+#           - "8000:8000"
+#           - "443:443"
+#           - "222:22"
+#           - "36723:36723"
+#           - "54982:54982"
+#       env_file:
+#           - .env
+#       build:
+#         context: ../
+#         dockerfile: backend.dockerfile
+#         args:
+#             INSTALL_DEV: false
+  
+>>>>>>> e7bfbd793b76d8589c76d062a7d7e6a89199305d
