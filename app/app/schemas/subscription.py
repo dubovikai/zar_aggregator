@@ -7,7 +7,8 @@ from pydantic import BaseModel
 class SubscriptionBase(BaseModel):
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
-    child_subscriptions: typing.Optional[typing.List['Subscription']]
+    # child_subscriptions: typing.Optional[typing.List['Subscription']]
+    child_subscriptions: typing.Optional[typing.Any]
 
 
 # Properties to receive on item creation``
