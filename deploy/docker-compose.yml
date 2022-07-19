@@ -1,74 +1,62 @@
 version: "3.3"
 services:
 
-  
   db:
-    image: mysql:5.7
-    container_name: db
-    environment:
-      MYSQL_ROOT_PASSWORD: My_Sql_Password
-      MYSQL_DATABASE: app_db
-      MYSQL_USER: db_user
-      MYSQL_PASSWORD: AdMiN
-    ports:
-      - "6033:3306"
-    volumes:
-      - dbdata:/var/lib/mysql
+      image: mysql:5.7
+      container_name: data_base
+      environment:
+          MYSQL_ROOT_PASSWORD: 'AdMiN'
+          MYSQL_DATABASE: 'app_db'
+          MYSQL_USER: 'db_user'
+          MYSQL_PASSWORD: 'AdMiN'
+      ports:
+          - "3306:3306"
+      volumes:
+          - /var/lib/mysql
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: pma
-    links:
-      - db
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
-    ports:
-      - 8088:80
+      image: phpmyadmin/phpmyadmin
+      container_name: phpma
+      links:
+          - db
+      environment:
+        PMA_HOST: db
+        PMA_PORT: 3306
+        PMA_ARBITRARY: 1
+      restart: always
+      ports:
+          - "8088:80"
 
-volumes:
-  dbdata:
   
   backend:
-    image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
-    depends_on:
-      - db
-    env_file:
-      - .env
-    environment:
-      - SERVER_NAME=${DOMAIN?Variable not set}
-      - SERVER_HOST=https://${DOMAIN?Variable not set}
-      # Allow explicit env var override for tests
-      - SMTP_HOST=${SMTP_HOST}
-    build:
-      context: ./backend
-      dockerfile: backend.dockerfile
-      args:
-        INSTALL_DEV: ${INSTALL_DEV-false}
-    deploy:
-      labels:
-        - traefik.enable=true
-        - traefik.constraint-label-stack=${TRAEFIK_TAG?Variable not set}
-        - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
-        - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
+      image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
+      depends_on:
+          - db
+      ports:
+          - "8000:8000"
+          - "443:443"
+          - "222:22"
+          - "36723:36723"
+          - "54982:54982"
+      env_file:
+          - .env
+      environment:
+        - SERVER_NAME=${DOMAIN?Variable not set}
+        - SERVER_HOST=https://${DOMAIN?Variable not set}
+        # Allow explicit env var override for tests
+        - SMTP_HOST=${SMTP_HOST}
+      build:
+        context: ../
+        dockerfile: backend.dockerfile
+        args:
+            INSTALL_DEV: ${INSTALL_DEV-false}
+      deploy:
+        labels:
+            - traefik.enable=true 
+            - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
+            - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
   
-  frontend:
-    image: '${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}'
-    build:
-      context: ./frontend
-      args:
-        FRONTEND_ENV: ${FRONTEND_ENV-production}
-    deploy:
-      labels:
-        - traefik.enable=true
-        - traefik.constraint-label-stack=${TRAEFIK_TAG?Variable not set}
-        - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
-        - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
 
-  volumes:
-  app-db-data:
-
+  
 networks:
   traefik-public:
     # Allow setting it to false for testing
