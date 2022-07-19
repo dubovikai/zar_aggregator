@@ -27,37 +27,21 @@ services:
           - "8088:80"
 
   
-  backend:
-      image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
-      depends_on:
-          - db
-      ports:
-          - "8000:8000"
-          - "443:443"
-          - "222:22"
-          - "36723:36723"
-          - "54982:54982"
-      env_file:
-          - .env
-      environment:
-        - SERVER_NAME=${DOMAIN?Variable not set}
-        - SERVER_HOST=https://${DOMAIN?Variable not set}
-        # Allow explicit env var override for tests
-        - SMTP_HOST=${SMTP_HOST}
-      build:
-        context: ../
-        dockerfile: backend.dockerfile
-        args:
-            INSTALL_DEV: ${INSTALL_DEV-false}
-      deploy:
-        labels:
-            - traefik.enable=true 
-            - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
-            - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
+#   backend:
+#       image: 'backend'
+#       depends_on:
+#           - db
+#       ports:
+#           - "8000:8000"
+#           - "443:443"
+#           - "222:22"
+#           - "36723:36723"
+#           - "54982:54982"
+#       env_file:
+#           - .env
+#       build:
+#         context: ../
+#         dockerfile: backend.dockerfile
+#         args:
+#             INSTALL_DEV: false
   
-
-  
-networks:
-  traefik-public:
-    # Allow setting it to false for testing
-    external: ${TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL-true}
