@@ -10,9 +10,10 @@ services:
           MYSQL_USER: 'db_user'
           MYSQL_PASSWORD: 'AdMiN'
       ports:
-          - "3306:3306"
+        - "3306:3306"
       volumes:
           - /var/lib/mysql
+          
   phpmyadmin:
       image: phpmyadmin/phpmyadmin
       container_name: phpma
@@ -24,24 +25,30 @@ services:
         PMA_ARBITRARY: 1
       restart: always
       ports:
-          - "8088:80"
+        - "8088:80"
 
   
-#   backend:
-#       image: 'backend'
-#       depends_on:
-#           - db
-#       ports:
-#           - "8000:8000"
-#           - "443:443"
-#           - "222:22"
-#           - "36723:36723"
-#           - "54982:54982"
-#       env_file:
-#           - .env
-#       build:
-#         context: ../
-#         dockerfile: backend.dockerfile
-#         args:
-#             INSTALL_DEV: false
-  
+  backend:
+      image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
+      ports:
+          - "8000:8000"
+          - "443:443"
+          - "222:22"
+          - "36723:36723"
+          - "54982:54982" 
+          - "80:80"
+      env_file:
+          - .env
+      environment:
+        - SERVER_NAME=${DOMAIN?Variable not set}
+        - SERVER_HOST=https://${DOMAIN?Variable not set}
+        # Allow explicit env var override for tests
+        - SMTP_HOST=${SMTP_HOST}
+      build:
+        context: ../
+        dockerfile: backend.dockerfile
+        args:
+            INSTALL_DEV: ${INSTALL_DEV-false}
+      depends_on:
+          - db # старт после старта контейнера db
+          - phpmyadmin
