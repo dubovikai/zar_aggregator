@@ -10,9 +10,10 @@ services:
           MYSQL_USER: 'db_user'
           MYSQL_PASSWORD: 'AdMiN'
       ports:
-          - "3306:3306"
+        - "3306:3306"
       volumes:
           - /var/lib/mysql
+          
   phpmyadmin:
       image: phpmyadmin/phpmyadmin
       container_name: phpma
@@ -24,19 +25,18 @@ services:
         PMA_ARBITRARY: 1
       restart: always
       ports:
-          - "8088:80"
+        - "8088:80"
 
   
   backend:
       image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
-      depends_on:
-          - db
       ports:
           - "8000:8000"
           - "443:443"
           - "222:22"
           - "36723:36723"
-          - "54982:54982"
+          - "54982:54982" 
+          - "80:80"
       env_file:
           - .env
       environment:
@@ -49,15 +49,6 @@ services:
         dockerfile: backend.dockerfile
         args:
             INSTALL_DEV: ${INSTALL_DEV-false}
-      deploy:
-        labels:
-            - traefik.enable=true 
-            - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
-            - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
-  
-
-  
-networks:
-  traefik-public:
-    # Allow setting it to false for testing
-    external: ${TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL-true}
+      depends_on:
+          - db # старт после старта контейнера db
+          - phpmyadmin
