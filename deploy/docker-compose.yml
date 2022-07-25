@@ -29,6 +29,6 @@ services:
         context: ../
         dockerfile: backend.dockerfile
         args:
-            INSTALL_DEV: false
+            INSTALL_DEV: "false"
       depends_on:
           - db # старт после старта контейнера db
