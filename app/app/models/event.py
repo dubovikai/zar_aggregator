@@ -23,7 +23,7 @@ class Event(Base):
     address = Column(String(512), nullable=True)
     latitude = Column(Float)
     longitude = Column(Float)
-    event_type_id = Column(Integer, ForeignKey('organizationtype.id'))
+    event_type_id = Column(Integer, ForeignKey('eventtype.id'))
     event_type = relationship("EventType", back_populates="events", 
                                         uselist=False)
     organization_id = Column(Integer, ForeignKey('organization.id'))
