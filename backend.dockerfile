@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
 WORKDIR /app/
 
@@ -24,5 +24,3 @@ RUN bash -c "if [ $INSTALL_JUPYTER == 'true' ] ; then pip install jupyterlab ; f
 
 COPY ./app /app
 ENV PYTHONPATH=/app
-
-CMD ["uvicorn", "app.main:app"]

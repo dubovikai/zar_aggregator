@@ -31,10 +31,10 @@ target_metadata = Base.metadata
 
 
 def get_url():
-    user = os.getenv("DB_USER", "API")
-    password = os.getenv("DB_PASSWORD", "123")
+    user = os.getenv("DB_USER", "db_user")
+    password = os.getenv("DB_PASSWORD", "AdMiN")
     server = os.getenv("DB_SERVER", "localhost")
-    db = os.getenv("DB_DB", "api")
+    db = os.getenv("DB_DB", "app_db")
     return f"mysql+mysqlconnector://{user}:{password}@{server}/{db}"
 
 
