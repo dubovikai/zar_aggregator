@@ -6,17 +6,17 @@ from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
-    from .organization import Or  # noqa: F401
+    from .event import EventType, Event  # noqa: F401
 
 
-class EventType(Base):
+class EventType(Base):  # noqa: F811
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(512), nullable=False, index=True, unique=True)
     description = Column(String(1024))
     events = relationship("Event", back_populates="event_type")
 
 
-class Event(Base):
+class Event(Base):  # noqa: F811
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(512), nullable=False, index=True, unique=True)
     description = Column(String(1024))
