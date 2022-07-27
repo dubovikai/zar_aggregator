@@ -1,9 +1,18 @@
 # zar_aggregator
 
-*this will apply previous migrations*
+*init environment variables for using scripts, can be added to venv/bin/activate script*
+export $(grep -v '^#' .env | xargs)
+export PYTHONPATH=.
+
+*working folder*
 cd app
-PYTHONPATH=. alembic upgrade head
+
+*init db for first launch*
+source prestart.sh
+
+*init environment variables for using scripts*
+alembic upgrade head
 
 *this will generate new migration (Python venv must be active)*
-PYTHONPATH=. alembic revision --autogenerate -m "Added account table"
+alembic revision --autogenerate -m "Added account table"
 

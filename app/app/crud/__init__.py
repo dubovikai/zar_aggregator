@@ -1,7 +1,7 @@
-from .crud_user import user
 from .crud_attraction import attraction
-from .crud_organization import organization
 from .crud_event import event
+from .crud_organization import organization
+from .crud_user import user
 
 # For a new basic set of CRUD operations you could just do
 

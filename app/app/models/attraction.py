@@ -1,13 +1,14 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Float, Integer, String
+
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
     from .attraction import Attraction  # noqa: F401
 
 
-class Attraction(Base):
+class Attraction(Base):  # noqa: F811
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(512), nullable=False, index=True, unique=True)
     description = Column(String(1024))

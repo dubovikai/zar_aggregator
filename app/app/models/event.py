@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
@@ -23,10 +24,9 @@ class Event(Base):
     address = Column(String(512), nullable=True)
     latitude = Column(Float)
     longitude = Column(Float)
-    event_type_id = Column(Integer, ForeignKey('eventtype.id'))
-    event_type = relationship("EventType", back_populates="events", 
-                                        uselist=False)
-    organization_id = Column(Integer, ForeignKey('organization.id'))
+    event_type_id = Column(Integer, ForeignKey("eventtype.id"))
+    event_type = relationship("EventType", back_populates="events", uselist=False)
+    organization_id = Column(Integer, ForeignKey("organization.id"))
     organization = relationship("Organization")
     start_datetime = Column(DateTime)
     end_datetime = Column(DateTime, nullable=True)

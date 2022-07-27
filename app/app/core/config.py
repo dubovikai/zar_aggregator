@@ -43,9 +43,11 @@ class Settings(BaseSettings):
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
         if isinstance(v, str):
             return v
-        return f'mysql+mysqlconnector://{values.get("DB_USER")}:' \
-            + f'{values.get("DB_PASSWORD")}@{values.get("DB_SERVER")}/' \
+        return (
+            f'mysql+mysqlconnector://{values.get("DB_USER")}:'
+            + f'{values.get("DB_PASSWORD")}@{values.get("DB_SERVER")}/'
             + f'{values.get("DB_DB")}'
+        )
 
     SMTP_TLS: bool = True
     SMTP_PORT: Optional[int] = None
@@ -68,8 +70,8 @@ class Settings(BaseSettings):
     @validator("EMAILS_ENABLED", pre=True)
     def get_emails_enabled(cls, v: bool, values: Dict[str, Any]) -> bool:
         return bool(
-            values.get("SMTP_HOST") 
-            and values.get("SMTP_PORT") 
+            values.get("SMTP_HOST")
+            and values.get("SMTP_PORT")
             and values.get("EMAILS_FROM_EMAIL")
         )
 

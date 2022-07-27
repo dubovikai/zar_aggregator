@@ -1,18 +1,24 @@
 {
     "python.linting.enabled": true,
+    "python.linting.cwd": "${workspaceFolder}/app",
     "python.linting.lintOnSave": true,
+
     "python.linting.flake8Enabled": true,
-    "python.linting.flake8Args": [
-        "--max-line-length=88",
-        "--ignore=W291,W503,E127,F401,W391,E731,E712,E711,F811,E402",
-    ],
-    "python.testing.pytestArgs": [
-        "app/tests"
-    ],
+
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyArgs": ["--config-file=${workspaceFolder}/app/mypy.ini"],
+    // "python.linting.mypyCategorySeverity.error": "Hint",
+
     "python.testing.cwd": "${workspaceFolder}/app",
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": ["app/tests"],
+    // "python.testing.autoTestDiscoverOnSaveEnabled": false,
 
     "python.analysis.extraPaths": ["app"],
-    "python.envFile": "${workspaceFolder}/.env"
+    "python.envFile": "${workspaceFolder}/.env",
+    "files.associations": {
+        ".env": "properties"
+    },
+    "python.formatting.provider": "black"
 }

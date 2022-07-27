@@ -8,13 +8,8 @@ from app.schemas.organization import OrganizationCreate, OrganizationUpdate
 
 
 class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUpdate]):
-
-    def get_all_organizations(
-        self, db: Session
-    ) -> List[Organization]:
-        return (
-            db.query(self.model).all()
-        )
+    def get_all_organizations(self, db: Session) -> List[Organization]:
+        return db.query(self.model).all()
 
 
 organization = CRUDOrganization(Organization)

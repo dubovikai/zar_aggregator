@@ -1,5 +1,6 @@
 import typing as t
 from datetime import datetime
+
 from pydantic import BaseModel, HttpUrl
 
 from .organization import Organization
@@ -14,7 +15,7 @@ class EventTypeInDB(EventType):
     id: int
 
     class Config:
-        orm_mode = True    
+        orm_mode = True
 
 
 # Shared properties

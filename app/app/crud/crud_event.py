@@ -8,13 +8,8 @@ from app.schemas.event import EventCreate, EventUpdate
 
 
 class CRUDOrganization(CRUDBase[Event, EventCreate, EventUpdate]):
-
-    def get_all_events(
-        self, db: Session
-    ) -> List[Event]:
-        return (
-            db.query(self.model).all()
-        )
+    def get_all_events(self, db: Session) -> List[Event]:
+        return db.query(self.model).all()
 
 
 event = CRUDOrganization(Event)

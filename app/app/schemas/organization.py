@@ -12,7 +12,7 @@ class OrganizationTypeInDB(OrganizationType):
     id: int
 
     class Config:
-        orm_mode = True    
+        orm_mode = True
 
 
 # Shared properties
