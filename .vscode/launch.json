@@ -5,14 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: текущий файл",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "env": {"PYTHONPATH": "${workspaceFolder}/app"}
-        },
-        {
             "name": "App",
             "type": "python",
             "request": "launch",
@@ -24,5 +16,13 @@
             ],
             "jinja": true
         },
+        {
+            "name": "Python: текущий файл",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {"PYTHONPATH": "${workspaceFolder}/app"}
+        }
     ]
 }

@@ -3,7 +3,7 @@ services:
 
   db:
       image: mysql:5.7
-      container_name: data_base
+      container_name: zar_aggregator_db
       environment:
           MYSQL_ROOT_PASSWORD: "RootPassword"
           MYSQL_DATABASE: "app_db"
@@ -15,7 +15,7 @@ services:
           - /var/lib/mysql
           
   backend:
-      image: "zar_aggregator_backend"
+      image: "zar_aggregator_back"
       ports:
           - "8000:8000"
           - "443:443"
