@@ -1,7 +1,6 @@
-from .crud_attraction import attraction
-from .crud_event import event
-from .crud_organization import organization
 from .crud_user import user
+
+from .crud_map_object import map_object, tag
 
 # For a new basic set of CRUD operations you could just do
 

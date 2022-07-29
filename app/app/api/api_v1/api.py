@@ -1,22 +1,14 @@
 from fastapi import APIRouter
 
 from app.api.api_v1.endpoints import (
-    attractions,
-    events,
     login,
-    organizations,
     users,
     utils,
+    map_objects
 )
 
 api_router = APIRouter()
 api_router.include_router(login.router, tags=["login"])
 api_router.include_router(users.router, prefix="/users", tags=["users"])
 api_router.include_router(utils.router, prefix="/utils", tags=["utils"])
-api_router.include_router(
-    attractions.router, prefix="/attractions", tags=["attraction"]
-)
-api_router.include_router(
-    organizations.router, prefix="/organizations", tags=["organization"]
-)
-api_router.include_router(events.router, prefix="/events", tags=["event"])
+api_router.include_router(map_objects.router, prefix="/map-objects", tags=["map_object"])

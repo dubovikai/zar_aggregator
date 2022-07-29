@@ -1,15 +1,9 @@
-from typing import TYPE_CHECKING
-
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, String
 
 from app.db.base_class import Base
 
-if TYPE_CHECKING:
-    from .user import User
-
 
 class User(Base):  # noqa: F811
-    id = Column(Integer, primary_key=True, index=True)
     full_name = Column(String(512), index=True)
     email = Column(String(256), unique=True, index=True, nullable=False)
     hashed_password = Column(String(1024), nullable=False)
