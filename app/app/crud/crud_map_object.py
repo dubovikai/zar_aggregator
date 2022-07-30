@@ -15,13 +15,12 @@ from app.schemas.map_object import (
 
 
 class CRUDMapObject(CRUDBase[MapObjectModel, MapObjectSchema]):
-    def get_map_objects_by_tag_id(self, db: Session, id: int, offset: int, limit: int):
+    def get_map_objects_by_tag_id(self, db: Session, id: int, offset: int, limit: int) -> t.List[MapObjectTagModel]:
         models = db.query(MapObjectModel) \
             .filter(MapObjectModel.tags.id == id) \
             .offset(offset=offset).limit(limit=limit) \
             .all()
-        schemas = [MapObjectSchema.from_orm(model) for model in models]
-        return schemas
+        return models
 
 
 map_object = CRUDMapObject(MapObjectModel)

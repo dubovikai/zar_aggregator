@@ -62,7 +62,7 @@ class MapObjectEvent(MapObject):
     id = Column(Integer, ForeignKey('map_object.id'), primary_key=True)
     start_datetime = Column(DateTime, nullable=True)
     duration = Column(Integer, nullable=True)
-    event_status_id = Column(Integer, ForeignKey('map_object_event_status.id'))
+    status_id = Column(Integer, ForeignKey('map_object_event_status.id'))
     status = relationship(MapObjectEventStatus)
 
     @hybrid_property

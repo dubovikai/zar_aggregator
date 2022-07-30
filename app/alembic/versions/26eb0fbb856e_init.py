@@ -118,8 +118,8 @@ def upgrade():
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('start_datetime', sa.DateTime(), nullable=True),
         sa.Column('duration', sa.Integer(), nullable=True),
-        sa.Column('event_status_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['event_status_id'], ['map_object_event_status.id'], ),
+        sa.Column('status_id', sa.Integer(), nullable=True),
+        sa.ForeignKeyConstraint(['status_id'], ['map_object_event_status.id'], ),
         sa.ForeignKeyConstraint(['id'], ['map_object.id'], ),
         sa.PrimaryKeyConstraint('id')
     )
@@ -149,8 +149,6 @@ def downgrade():
     op.drop_index(op.f('ix_map_object_event_status_name'), table_name='map_object_event_status')
     op.drop_index(op.f('ix_map_object_name'), table_name='map_object')
 
-    op.drop_table('map_object_event_status')
-
     op.drop_table('map_object_tag_mapping')
     op.drop_table('map_object_organization')
     op.drop_table('map_object_event')
@@ -159,4 +157,6 @@ def downgrade():
 
     op.drop_table('map_object')
     op.drop_table('user')
+
+    op.drop_table('map_object_event_status')
     # ### end Alembic commands ###
