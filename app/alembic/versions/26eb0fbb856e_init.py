@@ -7,6 +7,7 @@ Create Date: 2022-07-29 22:54:27.039713
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.dialects import mysql
 
 
 # revision identifiers, used by Alembic.
@@ -22,7 +23,7 @@ def upgrade():
         'map_object_event_status',
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
         sa.Column('name', sa.String(length=256), nullable=False),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_map_object_event_status'))
     )
     op.create_index(op.f('ix_map_object_event_status_name'), 'map_object_event_status', ['name'], unique=True)
 
@@ -33,8 +34,7 @@ def upgrade():
             {'name': 'need_votes'},
             {'name': 'need_attention'},
             {'name': 'updated'},
-            {'name': 'new'},
-            {'name': '_active (not_used! calculated by sqlalchemy model)'}
+            {'name': 'new'}
         ]
     )
 
@@ -43,7 +43,7 @@ def upgrade():
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
         sa.Column('name', sa.String(length=256), nullable=False),
         sa.Column('parent_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['parent_id'], ['map_object_tag.id'], ),
+        sa.ForeignKeyConstraint(['parent_id'], ['map_object_tag.id'], name=op.f('fk_map_object_tag_parent_id_map_object_tag')),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index('uix_map_object_tag', 'map_object_tag', ['name', 'parent_id'], unique=True)
@@ -84,14 +84,14 @@ def upgrade():
     op.create_table(
         'map_object',
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-        sa.Column('map_object_type', sa.Enum('event', 'organization', 'attraction', name='mapobjecttype'), nullable=True),
+        sa.Column('map_object_type', mysql.ENUM('event', 'organization', 'attraction'), nullable=True),
         sa.Column('name', sa.String(length=512), nullable=False),
         sa.Column('description', sa.String(length=1024), nullable=True),
         sa.Column('source_url', sa.String(length=1024), nullable=True),
         sa.Column('address', sa.String(length=512), nullable=True),
-        sa.Column('latitude', sa.Float(), nullable=True),
-        sa.Column('longitude', sa.Float(), nullable=True),
-        sa.PrimaryKeyConstraint('id')
+        sa.Column('latitude', sa.Float(), nullable=False),
+        sa.Column('longitude', sa.Float(), nullable=False),
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_map_object'))
     )
     op.create_index(op.f('ix_map_object_name'), 'map_object', ['name'], unique=True)
 
@@ -103,40 +103,44 @@ def upgrade():
         sa.Column('hashed_password', sa.String(length=1024), nullable=False),
         sa.Column('is_active', sa.Boolean(), nullable=True),
         sa.Column('is_superuser', sa.Boolean(), nullable=True),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_user'))
     )
     op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
     op.create_index(op.f('ix_user_full_name'), 'user', ['full_name'], unique=False)
+
     op.create_table(
         'map_object_attraction',
         sa.Column('id', sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(['id'], ['map_object.id'], ),
-        sa.PrimaryKeyConstraint('id')
+        sa.ForeignKeyConstraint(['id'], ['map_object.id'], name=op.f('fk_map_object_attraction_id_map_object')),
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_map_object_attraction'))
     )
+
     op.create_table(
         'map_object_event',
         sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('start_datetime', sa.DateTime(), nullable=True),
+        sa.Column('start_datetime', sa.DateTime(), nullable=False),
         sa.Column('duration', sa.Integer(), nullable=True),
-        sa.Column('status_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['status_id'], ['map_object_event_status.id'], ),
-        sa.ForeignKeyConstraint(['id'], ['map_object.id'], ),
-        sa.PrimaryKeyConstraint('id')
+        sa.Column('status_id', sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(['id'], ['map_object.id'], name=op.f('fk_map_object_event_id_map_object')),
+        sa.ForeignKeyConstraint(['status_id'], ['map_object_event_status.id'], name=op.f('fk_map_object_event_status_id_map_object_event_status')),
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_map_object_event'))
     )
+
     op.create_table(
         'map_object_organization',
         sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('contacts', sa.String(length=1024), nullable=True),
-        sa.ForeignKeyConstraint(['id'], ['map_object.id'], ),
-        sa.PrimaryKeyConstraint('id')
+        sa.Column('contacts', sa.String(length=1024), nullable=False),
+        sa.ForeignKeyConstraint(['id'], ['map_object.id'], name=op.f('fk_map_object_organization_id_map_object')),
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_map_object_organization'))
     )
+
     op.create_table(
         'map_object_tag_mapping',
         sa.Column('map_object_id', sa.Integer(), nullable=False),
         sa.Column('map_object_tag_id', sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(['map_object_id'], ['map_object.id'], ),
-        sa.ForeignKeyConstraint(['map_object_tag_id'], ['map_object_tag.id'], ),
-        sa.PrimaryKeyConstraint('map_object_id', 'map_object_tag_id')
+        sa.ForeignKeyConstraint(['map_object_id'], ['map_object.id'], name=op.f('fk_map_object_tag_mapping_map_object_id_map_object'), ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['map_object_tag_id'], ['map_object_tag.id'], name=op.f('fk_map_object_tag_mapping_map_object_tag_id_map_object_tag'), ondelete='CASCADE'),
+        sa.PrimaryKeyConstraint('map_object_id', 'map_object_tag_id', name=op.f('pk_map_object_tag_mapping'))
     )
     # ### end Alembic commands ###
 

@@ -2,7 +2,7 @@ version: "3.9"
 services:
 
   db:
-      image: mysql:5.7
+      image: mysql:latest
       container_name: zar_aggregator_db
       environment:
           MYSQL_ROOT_PASSWORD: "RootPassword"
@@ -33,3 +33,16 @@ services:
             INSTALL_DEV: "false"
       depends_on:
           - db # старт после старта контейнера db
+
+  admin:
+      image: "zar_aggregator_admin"
+      ports:
+          - "5000:5000"
+      env_file:
+          - ../.env
+      build:
+        context: ../
+        dockerfile: admin.dockerfile
+      depends_on:
+          - db # старт после старта контейнера db
+          - backend

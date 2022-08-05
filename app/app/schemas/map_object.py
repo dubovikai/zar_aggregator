@@ -2,7 +2,7 @@ import typing as t
 import datetime as dt
 import enum
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 
 
 class MapObjectTag(BaseModel):
@@ -17,7 +17,6 @@ class MapObjectTag(BaseModel):
 class MapObjectEventStatus(BaseModel):
     id: t.Optional[int] = None
     name: str
-    description: str
 
 
 class MapObjectType(enum.Enum):
@@ -29,8 +28,8 @@ class MapObjectType(enum.Enum):
 class MapObject(BaseModel):
     id: t.Optional[int] = None
     name: str
-    description: str
-    source_url: t.Optional[HttpUrl]
+    description: t.Optional[str]
+    source_url: t.Optional[str]
     address: t.Optional[str]
     latitude: float
     longitude: float
@@ -41,17 +40,24 @@ class MapObject(BaseModel):
 
 
 class MapObjectEvent(MapObject):
+    event: bool = True
     map_object_type: MapObjectType = MapObjectType.event
     start_datetime: dt.datetime
-    end_datetime: dt.datetime
+    end_datetime: t.Optional[dt.datetime]
     duration: t.Optional[int]
     status_name: str
 
 
+class MapObjectAttraction(MapObject):
+    attraction: bool = True
+    map_object_type: MapObjectType = MapObjectType.attraction
+
+
 class MapObjectOrganization(MapObject):
+    organization: bool = True
     map_object_type: MapObjectType = MapObjectType.organization
     contacts: str
 
 
-class MapObjectAttraction(MapObject):
-    map_object_type: MapObjectType = MapObjectType.attraction
+class AnyMapObject(BaseModel):
+    __root__: t.Union[MapObjectEvent, MapObjectOrganization, MapObjectAttraction]

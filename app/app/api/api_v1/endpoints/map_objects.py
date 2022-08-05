@@ -8,15 +8,8 @@ from app.api import deps
 
 router = APIRouter()
 
-# TODO automate type building
-map_object_union_type = t.Union[
-    schemas.MapObjectAttraction,
-    schemas.MapObjectEvent,
-    schemas.MapObjectOrganization
-]
 
-
-@router.get("/", response_model=t.List[map_object_union_type])
+@router.get("/", response_model=t.List[schemas.AnyMapObject])
 def read_map_objects(
     offset: int = 0,
     limit: int = 10,
@@ -28,10 +21,10 @@ def read_map_objects(
     """
     map_objects = crud.map_object.get_multi(db, offset=offset, limit=limit)
 
-    return map_objects
+    return [schemas.AnyMapObject.parse_obj(map_object) for map_object in map_objects]
 
 
-@router.get("/{id}", response_model=map_object_union_type)
+@router.get("/{id}", response_model=schemas.AnyMapObject)
 def read_map_object(
     id: int,
     db: Session = Depends(deps.get_db),
@@ -42,21 +35,23 @@ def read_map_object(
     """
     map_object = crud.map_object.get(db, id=id)
 
-    return map_object
+    return schemas.AnyMapObject.parse_obj(map_object)
 
 
-@router.get("/{tag_id}", response_model=map_object_union_type)
+@router.get("/by_tag/{tag_id}", response_model=t.List[schemas.AnyMapObject])
 def read_map_objects_by_tag_id(
-    category_id: int,
+    tag_id: int,
+    offset: int = 0,
+    limit: int = 10,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> t.Any:
     """
     Retrieve map object by tag.
     """
-    map_objects = crud.map_object.get_map_objects_by_tag_id()
+    map_objects = crud.map_object.get_map_objects_by_tag_id(db, id=tag_id, offset=offset, limit=limit)
 
-    return map_objects
+    return [schemas.AnyMapObject.parse_obj(map_object) for map_object in map_objects]
 
 
 @router.get("/tags/", response_model=t.List[schemas.MapObjectTag])

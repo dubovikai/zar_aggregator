@@ -1,6 +1,7 @@
 from .crud_user import user
 
-from .crud_map_object import map_object, tag
+from .crud_map_object import map_object
+from .crud_map_object_tag import tag
 
 # For a new basic set of CRUD operations you could just do
 

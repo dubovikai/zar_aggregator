@@ -1,47 +1,37 @@
 # * `model`: A SQLAlchemy model class
 # * `schema`: A Pydantic model (schema) class
 import typing as t
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, with_polymorphic
 
-from app.crud.base import CRUDBase
-from app.models.map_object import (
-    MapObject as MapObjectModel,
-    MapObjectTag as MapObjectTagModel
-)
-from app.schemas.map_object import (
-    MapObject as MapObjectSchema,
-    MapObjectTag as MapObjectTagSchema
-)
+from app.models import MapObject as MapObjectModel, MapObjectTag
+from app.schemas import MapObject as MapObjectSchema
 
 
-class CRUDMapObject(CRUDBase[MapObjectModel, MapObjectSchema]):
-    def get_map_objects_by_tag_id(self, db: Session, id: int, offset: int, limit: int) -> t.List[MapObjectTagModel]:
-        models = db.query(MapObjectModel) \
-            .filter(MapObjectModel.tags.id == id) \
+class CRUDMapObject():
+    map_objs = with_polymorphic(MapObjectModel, [sub_cls for sub_cls in MapObjectModel.__subclasses__()])
+
+    def _from_orm(self, model):
+        if not model:
+            return None
+        for sub_cls in MapObjectSchema.__subclasses__():
+            if sub_cls.__name__ == model.__class__.__name__:
+                return sub_cls.from_orm(model)
+
+    def get(self, db: Session, id: int) -> t.Any:
+        model = db.query(self.map_objs).filter(MapObjectModel.id == id).one_or_none()
+        return self._from_orm(model)
+
+    def get_map_objects_by_tag_id(self, db: Session, id: int, offset: int, limit: int) -> t.Any:
+        models = db.query(self.map_objs) \
+            .join(MapObjectModel.tags) \
+            .filter(MapObjectTag.id == id) \
             .offset(offset=offset).limit(limit=limit) \
             .all()
-        return models
+        return [self._from_orm(model) for model in models]
+
+    def get_multi(self, db: Session, *, offset: int = 0, limit: int = 100) -> t.Any:
+        models = db.query(self.map_objs).offset(offset).limit(limit).all()
+        return [self._from_orm(model) for model in models]
 
 
-map_object = CRUDMapObject(MapObjectModel)
-
-
-class CRUDTag(CRUDBase[MapObjectTagModel, MapObjectTagSchema]):
-    def get_all_tags(self, db: Session) -> t.List[MapObjectTagModel]:
-        return db.query(MapObjectTagModel).filter(MapObjectTagModel.parent_id.is_(None)).all()
-
-    def get_all_tags_ids_by_id(self, db: Session, id: int) -> t.List[int]:
-        models = db.query(MapObjectTagModel).filter(MapObjectTagModel.id == id).all()
-        ids_list = []
-
-        def recursive_list_builder(models_: t.List[MapObjectTagModel]) -> t.List[int]:
-            nonlocal ids_list
-            for model in models_:
-                ids_list.append(model.id)
-                recursive_list_builder(model.children)
-
-        recursive_list_builder(models)
-        return ids_list
-
-
-tag = CRUDTag(MapObjectTagModel)
+map_object = CRUDMapObject()

@@ -80,6 +80,9 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = False
 
+    FLASK_ENV: Optional[str] = 'production'
+    BABEL_LOCALE: Optional[str] = 'ru'
+
     class Config:
         case_sensitive = True
 

@@ -4,6 +4,7 @@
     // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "App",
             "type": "python",
@@ -14,7 +15,34 @@
                 "app.main:app",
                 "--reload"
             ],
+            "jinja": true,
+            "justMyCode": false
+        },
+        {
+            "name": "Admin",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "${workspaceFolder}/app/app/admin/start_admin.py",
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "0",
+                "PYTHONPATH": "${workspaceFolder}/app"
+            },
+            "args": [
+                "run",
+                "--no-debugger",
+                "--no-reload"
+            ],
             "jinja": true
+        },
+        {
+            "name": "Init DB",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/app/initial_data.py",
+            "console": "integratedTerminal",
+            "env": {"PYTHONPATH": "${workspaceFolder}/app"}
         },
         {
             "name": "Python: текущий файл",
