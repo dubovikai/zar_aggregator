@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session, with_polymorphic
 
 from app.models import MapObject as MapObjectModel, MapObjectTag
 from app.schemas import MapObject as MapObjectSchema
+from .crud_map_object_tag import tag
 
 
 class CRUDMapObject():
@@ -22,9 +23,10 @@ class CRUDMapObject():
         return self._from_orm(model)
 
     def get_map_objects_by_tag_id(self, db: Session, id: int, offset: int, limit: int) -> t.Any:
+        tag_ids = tag.get_all_tags_ids_by_id(db, id)
         models = db.query(self.map_objs) \
             .join(MapObjectModel.tags) \
-            .filter(MapObjectTag.id == id) \
+            .filter(MapObjectTag.id.in_(tag_ids)) \
             .offset(offset=offset).limit(limit=limit) \
             .all()
         return [self._from_orm(model) for model in models]

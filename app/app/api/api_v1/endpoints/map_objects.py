@@ -79,17 +79,3 @@ def read_tag(
     tag = crud.tag.get(db, id)
 
     return tag
-
-
-@router.get("/tags/get-all-child-ids/{id}", response_model=t.List[int])
-def read_interesting_categories(
-    id: int,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
-) -> t.Any:
-    """
-    Retrieve interesting category ids.
-    """
-    ids = crud.tag.get_all_tags_ids_by_id(db, id)
-
-    return ids
