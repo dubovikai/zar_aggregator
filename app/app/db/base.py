@@ -15,3 +15,4 @@ from app.models.map_object import (
     map_object_tag_mapping,
     MapObjectTag
 )
+from app.models.favorites import Favorites
