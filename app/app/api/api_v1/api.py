@@ -4,7 +4,8 @@ from app.api.api_v1.endpoints import (
     login,
     users,
     utils,
-    map_objects
+    map_objects,
+    favorites
 )
 
 api_router = APIRouter()
@@ -12,3 +13,4 @@ api_router.include_router(login.router, tags=["login"])
 api_router.include_router(users.router, prefix="/users", tags=["users"])
 api_router.include_router(utils.router, prefix="/utils", tags=["utils"])
 api_router.include_router(map_objects.router, prefix="/map-objects", tags=["map_object"])
+api_router.include_router(favorites.router, prefix="/favorites", tags=["favorites"])

@@ -22,3 +22,4 @@ map_object_type_list = [
     MapObjectEvent,
     MapObjectOrganization
 ]
+from .favorites import Favorites

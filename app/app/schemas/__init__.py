@@ -2,6 +2,7 @@ import typing as t
 from .msg import Msg
 from .token import Token, TokenPayload
 from .user import User, UserCreate, UserInDB, UserUpdate
+from .favorites import Favorites
 
 
 from .map_object import (
