@@ -54,6 +54,5 @@ services:
         build:
           context: ../
           dockerfile: worker.dockerfile
-#q        depends_on:
+#        depends_on:
 #            - backend # старт после старта контейнера backend
-        command: php -f ping_res.php
