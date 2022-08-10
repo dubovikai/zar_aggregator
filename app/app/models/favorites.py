@@ -5,8 +5,6 @@ from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 from .map_object import MapObject
 
-from .user import User
-
 
 class Favorites(Base):
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
