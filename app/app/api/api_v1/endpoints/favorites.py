@@ -19,7 +19,7 @@ def read_user_favorites(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> t.Any:
     """
-    Retrieve favorites.
+    Получить избранное пользователя. offset, limit - параметры пагинации.
     """
     user_favorites = crud.favorites.get_user_favorites(db, user_id=user_id, offset=offset, limit=limit)
 
@@ -34,7 +34,9 @@ def create_favorites(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> t.Any:
     """
-    Create new Favorites.
+    Создать Избранное.
+    В схеме Favorites достаточно передать user_id и map_object_id. Будет создана сущность Favorites
+    с атрибутами date_start = now, date_end = null, is_active = True
     """
     create_favorites = crud.favorites.create(db=db, obj_in=favorites_in)
     return create_favorites
@@ -48,7 +50,7 @@ def delete_favorites(
     current_user: models.User = Depends(deps.get_current_active_user)
 ) -> t.Any:
     """
-    Delete an Favorites.
+    Удалить избранное.
     """
     del_favorites = crud.favorites.remove(db=db, id=id)
     return del_favorites

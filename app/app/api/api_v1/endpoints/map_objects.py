@@ -17,7 +17,9 @@ def read_map_objects(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> t.Any:
     """
-    Retrieve map objects.
+    Получить все объекты карты.
+    offset, limit - параметры пагинации.
+    TODO: В схему MapObject добавить атрибут icon, содержащий строку: svg в base64
     """
     map_objects = crud.map_object.get_multi(db, offset=offset, limit=limit)
 
@@ -31,7 +33,7 @@ def read_map_object(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> t.Any:
     """
-    Retrieve map object.
+    Получить объект карты по id.
     """
     map_object = crud.map_object.get(db, id=id)
 
@@ -47,7 +49,10 @@ def read_map_objects_by_tag_id(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> t.Any:
     """
-    Retrieve map object by tag.
+    Получить все объекты карты по тэгу, см. метод "/tags/".
+    Будут возвращены все объекты с тэгом из запроса и с дочерними к нему.
+    Отношение MapObject -> Tag: многие ко многим.
+    offset, limit - параметры пагинации.
     """
     map_objects = crud.map_object.get_map_objects_by_tag_id(db, id=tag_id, offset=offset, limit=limit)
 
@@ -60,7 +65,10 @@ def read_categories(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> t.Any:
     """
-    Retrieve tags.
+    Получить дерево тэгов (заполнено тестовыми данными!!!).
+    В тестовых данных три корневых тэга:
+    Организации, Видеокамеры, Достопримечательности
+    TODO: Добавить тэг Мероприятия, редактируется сопровождением в админке.
     """
     tags = crud.tag.get_all_tags(db)
 
@@ -74,7 +82,7 @@ def read_tag(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> t.Any:
     """
-    Retrieve tag.
+    Получить тэг по id.
     """
     tag = crud.tag.get(db, id)
 
