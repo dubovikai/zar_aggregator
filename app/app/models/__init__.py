@@ -1,5 +1,5 @@
 import typing as t
-from .user import User
+from .user import User, VKUser
 
 from .map_object import (
     MapObjectEventStatus,

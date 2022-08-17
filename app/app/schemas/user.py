@@ -1,14 +1,14 @@
-from typing import Optional
-
+import typing as t
 from pydantic import BaseModel, EmailStr
 
 
 # Shared properties
 class UserBase(BaseModel):
-    email: Optional[EmailStr] = None
-    is_active: Optional[bool] = True
+    email: t.Optional[EmailStr] = None
+    vk_uid: t.Optional[int]
+    is_active: t.Optional[bool] = True
     is_superuser: bool = False
-    full_name: Optional[str] = None
+    full_name: t.Optional[str] = None
 
 
 # Properties to receive via API on creation
@@ -19,11 +19,11 @@ class UserCreate(UserBase):
 
 # Properties to receive via API on update
 class UserUpdate(UserBase):
-    password: Optional[str] = None
+    password: t.Optional[str] = None
 
 
 class UserInDBBase(UserBase):
-    id: Optional[int] = None
+    id: t.Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -37,3 +37,10 @@ class User(UserInDBBase):
 # Additional properties stored in DB
 class UserInDB(UserInDBBase):
     hashed_password: str
+
+
+class VKUser(BaseModel):
+    uid: int
+    user: t.Optional[UserBase]
+    first_name: str
+    last_name: str
