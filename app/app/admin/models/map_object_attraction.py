@@ -13,7 +13,7 @@ class MapObjectAttractionView(ModelView):
         "name",
         "description",
         "source_url_vk",
-        "source_id_vk"
+        "source_id_vk",
         "address",
         "latitude",
         "longitude",
