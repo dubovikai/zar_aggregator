@@ -29,7 +29,8 @@ class MapObject(BaseModel):
     id: t.Optional[int] = None
     name: str
     description: t.Optional[str]
-    source_url: t.Optional[str]
+    source_url_vk: t.Optional[str]
+    source_id_vk: t.Optional[int]
     address: t.Optional[str]
     latitude: float
     longitude: float
