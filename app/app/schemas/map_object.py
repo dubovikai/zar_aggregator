@@ -31,6 +31,7 @@ class MapObject(BaseModel):
     description: t.Optional[str]
     source_url_vk: t.Optional[str]
     source_id_vk: t.Optional[int]
+    post_id_vk: t.Optional[int]
     address: t.Optional[str]
     latitude: float
     longitude: float

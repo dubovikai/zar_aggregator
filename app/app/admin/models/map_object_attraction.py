@@ -14,6 +14,7 @@ class MapObjectAttractionView(ModelView):
         "description",
         "source_url_vk",
         "source_id_vk",
+        "post_id_vk",
         "address",
         "latitude",
         "longitude",
@@ -25,6 +26,7 @@ class MapObjectAttractionView(ModelView):
         "description": "Описание",
         "source_url_vk": "Ссылка",
         "source_id_vk": "source_id",
+        "post_id_vk": "post_id_vk",
         "address": "Адрес",
         "latitude": "Широта",
         "longitude": "Долгота",
@@ -40,6 +42,7 @@ class MapObjectAttractionView(ModelView):
         "description",
         "source_url_vk",
         "source_id_vk",
+        "post_id_vk",
         "address",
         "latitude",
         "longitude",
@@ -51,7 +54,7 @@ class MapObjectAttractionView(ModelView):
     ]
 
     column_sortable_list = [
-        'name', 'description', 'source_id_vk', 'source_url_vk', 'address'
+        'name', 'description', 'source_id_vk', 'source_url_vk', 'post_id_vk', 'address'
     ]
 
     column_default_sort = 'name'
