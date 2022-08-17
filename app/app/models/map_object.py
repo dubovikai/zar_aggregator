@@ -43,7 +43,8 @@ class MapObject(Base):
 
     name = Column(String(512), nullable=False, index=True, unique=True)
     description = Column(String(1024), nullable=True)
-    source_url = Column(String(1024), nullable=True)
+    source_url_vk = Column(String(1024), nullable=True)
+    source_id_vk = Column(Integer, nullable=True)
     address = Column(String(512), nullable=True)
     latitude = Column(Float, CheckConstraint('latitude >= -90 and latitude <= 90', name='chk_map_objects_latitudes'), nullable=False)
     longitude = Column(Float, CheckConstraint('longitude >= 0 and longitude <= 180', name='chk_map_objects_longitudes'), nullable=False)

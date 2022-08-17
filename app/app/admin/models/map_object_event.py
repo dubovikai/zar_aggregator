@@ -11,7 +11,8 @@ class MapObjectEventView(ModelView):
     column_list = [
         "name",
         "description",
-        "source_url",
+        "source_url_vk",
+        "source_id_vk",
         "address",
         "latitude",
         "longitude",
@@ -25,7 +26,8 @@ class MapObjectEventView(ModelView):
     column_labels = {
         "name": "Название",
         "description": "Описание",
-        "source_url": "Ссылка",
+        "source_url_vk": "Ссылка",
+        "source_id_vk": "source_id",
         "address": "Адрес",
         "latitude": "Широта",
         "longitude": "Долгота",
@@ -43,7 +45,8 @@ class MapObjectEventView(ModelView):
     form_columns = [
         "name",
         "description",
-        "source_url",
+        "source_url_vk",
+        "source_id_vk",
         "address",
         "latitude",
         "longitude",
@@ -60,7 +63,8 @@ class MapObjectEventView(ModelView):
     column_sortable_list = [
         'name',
         'description',
-        'source_url',
+        'source_url_vk',
+        'source_id_vk',
         'address',
         'start_datetime',
         'end_datetime',

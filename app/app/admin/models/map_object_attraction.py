@@ -12,7 +12,8 @@ class MapObjectAttractionView(ModelView):
     column_list = [
         "name",
         "description",
-        "source_url",
+        "source_url_vk",
+        "source_id_vk"
         "address",
         "latitude",
         "longitude",
@@ -22,7 +23,8 @@ class MapObjectAttractionView(ModelView):
     column_labels = {
         "name": "Название",
         "description": "Описание",
-        "source_url": "Ссылка",
+        "source_url_vk": "Ссылка",
+        "source_id_vk": "source_id",
         "address": "Адрес",
         "latitude": "Широта",
         "longitude": "Долгота",
@@ -36,7 +38,8 @@ class MapObjectAttractionView(ModelView):
     form_columns = [
         "name",
         "description",
-        "source_url",
+        "source_url_vk",
+        "source_id_vk",
         "address",
         "latitude",
         "longitude",
@@ -48,7 +51,7 @@ class MapObjectAttractionView(ModelView):
     ]
 
     column_sortable_list = [
-        'name', 'description', 'source_url', 'address'
+        'name', 'description', 'source_id_vk', 'source_url_vk', 'address'
     ]
 
     column_default_sort = 'name'
