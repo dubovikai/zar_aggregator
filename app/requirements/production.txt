@@ -22,3 +22,5 @@ wheel
 flask-admin
 flask-babelex
 python-dotenv
+
+vk-api

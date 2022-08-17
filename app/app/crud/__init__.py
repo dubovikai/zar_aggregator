@@ -4,6 +4,7 @@ from .crud_map_object import map_object
 from .crud_map_object_tag import tag
 
 from .crud_favorites import favorites
+from .crud_vk_user import vk_user
 
 # For a new basic set of CRUD operations you could just do
 
