@@ -1,5 +1,6 @@
 import datetime as dt
 import json
+import os
 from typing import Any
 # import requests
 
@@ -128,8 +129,8 @@ def get_vk_access_token(
 
     if code:
         redirect_url = "http://localhost:8000/api/v1/vk_auth/callback"
-        app_id = 51402004
-        secret = 'AaHczuSNu2amEIw0GUhf'
+        app_id = os.getenv('VK_APP_ID')
+        secret = os.getenv('SERVICE_KEY')
 
         vk_session = VkApi(app_id=app_id, client_secret=secret)
         vk_session.code_auth(code, redirect_url)
@@ -159,7 +160,7 @@ def get_service_token_app() -> Any:
     """
     Метод без параметров, отдаёт сервисный ключ приложения.
     """ 
-    app_id = 51439579
-    secret = 'PsB4W0SVkFGP1M3I2BAH'
+    app_id = os.getenv('VK_APP_ID')
+    secret = os.getenv('SERVICE_KEY')
     app_token = json.loads(get(f'https://oauth.vk.com/access_token?client_id={app_id}&client_secret={secret}&v=5.131&grant_type=client_credentials').content)
     return app_token['access_token']
