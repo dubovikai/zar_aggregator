@@ -1,4 +1,5 @@
 import datetime as dt
+import json
 from typing import Any
 # import requests
 
@@ -6,6 +7,7 @@ from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi.responses import RedirectResponse
+from requests import get
 from sqlalchemy.orm import Session
 
 from vk_api.vk_api import VkApi
@@ -150,3 +152,14 @@ def get_vk_access_token(
             "token_type": "bearer",
             "vk_token": vk_session.token
         }
+
+
+@router.get("/vk_auth/token_app")
+def get_service_token_app() -> Any:
+    """
+    Метод без параметров, отдаёт сервисный ключ приложения.
+    """ 
+    app_id = 51439579
+    secret = 'PsB4W0SVkFGP1M3I2BAH'
+    app_token = json.loads(get(f'https://oauth.vk.com/access_token?client_id={app_id}&client_secret={secret}&v=5.131&grant_type=client_credentials').content)
+    return app_token['access_token']
