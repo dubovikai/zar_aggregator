@@ -13,7 +13,7 @@ class CRUDVKUser(CRUDBase[VKUserModel, VKUserSchema]):
 
     def get_or_create_user(self, db: Session, vk_user: VKUserSchema) -> VKUserModel:
         # TODO Check if vk user account is not banned and deleted
-        new_vk_user = self.get_user_by_uid(vk_user.uid)
+        new_vk_user = self.get_user_by_uid(db, vk_user.uid)
         if not new_vk_user:
             new_vk_user = self.create(db, obj_in=vk_user)
         if not new_vk_user.user:

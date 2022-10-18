@@ -114,7 +114,7 @@ def get_redirect() -> Any:
     """
     app_id = os.getenv('VK_APP_ID')
     return RedirectResponse(
-        f'https://oauth.vk.com/authorize?client_id={app_id}&display=page&redirect_uri=http://localhost/api/v1/vk_auth/callback&response_type=code&v=5.131'
+        f'https://oauth.vk.com/oauth/authorize?client_id={app_id}&scope=friends,status,groups,stats,ads,offline&display=page&redirect_uri=http://localhost:8000/api/v1/vk_auth/callback&response_type=code&response_ENGINE=token&v=5.131'
     )
 
 
@@ -132,14 +132,13 @@ def get_vk_access_token(
         raise HTTPException(status_code=400, detail=f"VK Error {error}: {error_description}")
 
     if code:
-        redirect_url = "http://localhost/api/v1/vk_auth/callback"
+        redirect_url = "http://localhost:8000/api/v1/vk_auth/callback"
         vk_session = VkApi(app_id=app_id, client_secret=secret)
         vk_session.code_auth(code, redirect_url)
         vk_api = vk_session.get_api()
-        data = vk_api.user.get(ids=vk_session.token['user_id'])[0]
-
+        data = vk_api.users.get(user_ids=vk_session.token['user_id'])[0]
         new_vk_user = models.VKUser(
-            uid=vk_session.token['user_id'],
+            uid=int(vk_session.token['user_id']),
             first_name=data['first_name'],
             last_name=data['last_name']
         )
@@ -160,7 +159,6 @@ def get_vk_access_token(
 def get_service_token_app() -> Any:
     """
     Метод без параметров, отдаёт сервисный ключ приложения.
-    """ 
-
+    """
     app_token = json.loads(get(f'https://oauth.vk.com/access_token?client_id={app_id}&client_secret={secret}&v=5.131&grant_type=client_credentials').content)
     return app_token['access_token']
