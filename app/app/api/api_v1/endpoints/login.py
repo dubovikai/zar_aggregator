@@ -26,6 +26,7 @@ from app.utils import (
 
 app_id = os.getenv('VK_APP_ID')
 secret = os.getenv('SERVICE_KEY')
+host = os.getenv('SERVER_HOST')
 
 router = APIRouter()
 
@@ -112,9 +113,9 @@ def get_redirect() -> Any:
     """
     Редирект на https://oauth.vk.com/authorize для авторизации в ВК.
     """
-    app_id = os.getenv('VK_APP_ID')
+
     return RedirectResponse(
-        f'https://oauth.vk.com/oauth/authorize?client_id={app_id}&scope=friends,status,groups,stats,ads,offline&display=page&redirect_uri=http://localhost:8000/api/v1/vk_auth/callback&response_type=code&response_ENGINE=token&v=5.131'
+        f'https://oauth.vk.com/oauth/authorize?client_id={app_id}&scope=friends,status,groups,stats,ads,offline&display=page&redirect_uri={host}/api/v1/vk_auth/callback&response_type=code&response_ENGINE=token&v=5.131'
     )
 
 
@@ -132,7 +133,7 @@ def get_vk_access_token(
         raise HTTPException(status_code=400, detail=f"VK Error {error}: {error_description}")
 
     if code:
-        redirect_url = "http://localhost:8000/api/v1/vk_auth/callback"
+        redirect_url = f"{host}/api/v1/vk_auth/callback"
         vk_session = VkApi(app_id=app_id, client_secret=secret)
         vk_session.code_auth(code, redirect_url)
         vk_api = vk_session.get_api()
